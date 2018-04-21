@@ -22,16 +22,27 @@ char engKeymap[2][3]={
   {'3', '6', '9'},
   {'5', '4', 'n'}};
 
+ char engDirectional[2][2]={
+  {'u','l'},
+  {'r','d'}
+ };
+
 
 byte rowPins[numRows] = {9, 8, 7, 6}; 
 byte colPins[numCols] = {5, 4, 3, 2}; 
-
 byte engRowPins[2]={0,13};
 byte engColPins[3]={12,11,10};
 
-//initializes two instances of the Keypad class
+//byte DirPin[2]={,};
+//byte DirCol[2]={,};
+
+
+
+//initializes three instances of the Keypad class
 Keypad myKeypad=Keypad(makeKeymap(keymap), rowPins, colPins, numRows, numCols);
 Keypad EngIn=Keypad(makeKeymap(engKeymap),engRowPins,engColPins,2,3);
+//Keypad DirPad=Keypad(makeKeymap(engDirectional),DirPin,DirCol,2,2);
+
 
 void setup() {
   Serial.begin(9600);
@@ -50,6 +61,11 @@ void requestEvent(){
   char ReturnPad=myKeypad.getKey();
   if(ReturnPad!=NO_KEY){
     Wire.write(ReturnPad);
+  }
+
+  char ReturnDir=DirPad.getKey();
+  if(ReturnDir!=NO_KEY){
+    Wire.write(ReturnDir);
   }
 }
 

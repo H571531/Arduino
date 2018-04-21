@@ -24,8 +24,7 @@ char engKeymap[2][3]={
 
  char engDirectional[2][2]={
   {'u','l'},
-  {'r','d'}
- };
+  {'r','d'}};
 
 
 byte rowPins[numRows] = {9, 8, 7, 6}; 
@@ -33,15 +32,15 @@ byte colPins[numCols] = {5, 4, 3, 2};
 byte engRowPins[2]={0,13};
 byte engColPins[3]={12,11,10};
 
-//byte DirPin[2]={,};
-//byte DirCol[2]={,};
+byte DirPin[2]={A0,A1};
+byte DirCol[2]={A2,A3};
 
 
 
 //initializes three instances of the Keypad class
 Keypad myKeypad=Keypad(makeKeymap(keymap), rowPins, colPins, numRows, numCols);
 Keypad EngIn=Keypad(makeKeymap(engKeymap),engRowPins,engColPins,2,3);
-//Keypad DirPad=Keypad(makeKeymap(engDirectional),DirPin,DirCol,2,2);
+Keypad DirPad=Keypad(makeKeymap(engDirectional),DirPin,DirCol,2,2);
 
 
 void setup() {

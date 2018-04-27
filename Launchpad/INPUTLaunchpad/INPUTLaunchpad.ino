@@ -1,22 +1,12 @@
 #include <Keypad.h>
 #include <Wire.h>
 
-const byte numRows= 4;
 
-const byte numCols= 4;
-
-const byte engNumRows=2;
-const byte engNumCols=3;
-
-
-char keymap[numRows][numCols]= { 
+char keymap[4][4]= { 
 {'1', '2', '3', 'A'},
-
 {'4', '5', '6', 'B'},
-
 {'7', '8', '9', 'C'},
-
-{'*', '0', '#', 'D'} };
+{'*', '0', '#', 'D'}};
 
 char engKeymap[2][3]={
   {'3', '6', '9'},
@@ -27,8 +17,8 @@ char engKeymap[2][3]={
   {'r','d'}};
 
 
-byte rowPins[numRows] = {9, 8, 7, 6}; 
-byte colPins[numCols] = {5, 4, 3, 2}; 
+byte rowPins[4] = {9, 8, 7, 6}; 
+byte colPins[4] = {5, 4, 3, 2}; 
 byte engRowPins[2]={0,13};
 byte engColPins[3]={12,11,10};
 
@@ -38,7 +28,7 @@ byte DirCol[2]={A2,A3};
 
 
 //initializes three instances of the Keypad class
-Keypad myKeypad=Keypad(makeKeymap(keymap), rowPins, colPins, numRows, numCols);
+Keypad myKeypad=Keypad(makeKeymap(keymap), rowPins, colPins, 4, 4);
 Keypad EngIn=Keypad(makeKeymap(engKeymap),engRowPins,engColPins,2,3);
 Keypad DirPad=Keypad(makeKeymap(engDirectional),DirPin,DirCol,2,2);
 

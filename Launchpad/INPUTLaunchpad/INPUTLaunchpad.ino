@@ -37,7 +37,7 @@ byte engColPins[3]={32,34,33};
 byte DirPin[2]={A0,A1};
 byte DirCol[2]={A2,A3};
 
-
+char input=' ';
 
 //initializes three instances of the Keypad class
 Keypad myKeypad=Keypad(makeKeymap(keymap), rowPins, colPins, 4, 4);
@@ -47,13 +47,20 @@ Keypad DirPad=Keypad(makeKeymap(engDirectional),DirPin,DirCol,2,2);
 
 void setup() { 
   lcd.begin(16, 2);
-  Wire.onRequest(requestEvent);
+  
   Serial.begin(9600);
   Wire.begin(8);
   
   // Print a message to the LCD.
-  lcd.print("hello, world!");
-  
+  lcd.print("Booting...");
+  lcd.setCursor(0, 1);
+  for(int i=0;i<16;i++){
+    lcd.print("0");
+    delay(100);
+  }
+
+  bootSeq();
+  Wire.onRequest(requestEvent);
 }
 
 //If key is pressed, this key is stored in a 'keypressed' variable
@@ -75,7 +82,6 @@ void requestEvent(){
   }
 }
 
-
 void loop() {
 /*
  //DEBUG
@@ -91,7 +97,24 @@ if(ReturnEng!=NO_KEY){
   */
 }
 
-
+void bootSeq(){
+  lcd.clear();
+  lcd.print("Select profile:");
+  lcd.setCursor(0, 1);
+   
+  
+  do{
+     char input=myKeypad.getKey();
+    if(input!=NO_KEY){
+      if(input!='#'){
+    lcd.print(input);
+      }else{
+        break;
+      }
+    }
+    }while(input!='#');
+   
+}
 
 
 

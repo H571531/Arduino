@@ -32,8 +32,15 @@ const int BackS=6;
 const int red=6;
 const int blue=7;
 const int Sswitch=5;
-
 int buttonState = 0; 
+
+//Joystick
+const int X_pin = A1; // analog pin connected to X output
+const int Y_pin = A0; // analog pin connected to Y output
+int x;
+int y;
+
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -57,7 +64,7 @@ void setup() {
    toggleLandinggear=0;
    toggleStatus=0;
    runPresets();
-
+StartupSeq();
    
 }
 
@@ -73,7 +80,7 @@ void loop() {
                     circle.setPixelColor(9,255,255,0);
                     circle.setBrightness(64);
                     circle.show();
-                    StartupSeq();
+                    
 
     Wire.requestFrom(8,1);
     while (Wire.available()) { // slave may send less than requested
@@ -202,9 +209,25 @@ void loop() {
  
                 
     }else{
-      Serial.write("Knapp på");
+     // Serial.write("Knapp på");
       digitalWrite(red, HIGH);
       digitalWrite(blue, LOW);
+      Serial.write("X: ");
+      Serial.println(analogRead(X_pin));
+      Serial.write("Y: ");
+      Serial.println(analogRead(Y_pin));
+   x=analogRead(X_pin);
+   y=analogRead(Y_pin);
+      if(x<100){
+        Serial.println("Venstre");
+      }else if(x>1000){
+        Serial.println("Hoyre");
+      }else if(y<100){
+        Serial.println("Ned");
+      }else if(y>1000){
+        Serial.println("Opp");
+      }
+      
     }
     }
 }
@@ -222,7 +245,7 @@ void runPresets(){
     for(int i=0; i<12; i++){
       circle.setPixelColor(i, 0, 0, 255);
       circle.show();
-      delay(50);
+      delay(200);
     }    
   }
 

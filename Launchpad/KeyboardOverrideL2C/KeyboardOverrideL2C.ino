@@ -64,7 +64,7 @@ void setup() {
    toggleLandinggear=0;
    toggleStatus=0;
    runPresets();
-StartupSeq();
+   StartupSeq();
    
 }
 
@@ -219,15 +219,34 @@ void loop() {
    x=analogRead(X_pin);
    y=analogRead(Y_pin);
       if(x<100){
-        Serial.println("Venstre");
+        Serial.println("Left");
+              Keyboard.begin();
+              Keyboard.press(228);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
       }else if(x>1000){
-        Serial.println("Hoyre");
+        Serial.println("Right");
+              Keyboard.begin();
+              Keyboard.press(230);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();          
       }else if(y<100){
-        Serial.println("Ned");
+        Serial.println("Down");
+              Keyboard.begin();
+              Keyboard.press(226);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();          
       }else if(y>1000){
-        Serial.println("Opp");
+        Serial.println("Up");
+              Keyboard.begin();
+              Keyboard.press(232);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();         
       }
-      
     }
     }
 }

@@ -28,7 +28,12 @@ const int RightS=3;
 const int FrontS=0;
 const int BackS=6;
 
+//Switch
+const int red=6;
+const int blue=7;
+const int Sswitch=5;
 
+int buttonState = 0; 
 
 void setup() {
   // put your setup code here, to run once:
@@ -39,7 +44,10 @@ void setup() {
   circle.show();
   
   Wire.begin();
-  
+
+  pinMode(Sswitch, INPUT);
+  pinMode(red,OUTPUT);
+  pinMode(blue,OUTPUT);
   
    toggleLights=0;
    toggleEngines=0;
@@ -49,6 +57,8 @@ void setup() {
    toggleLandinggear=0;
    toggleStatus=0;
    runPresets();
+
+   
 }
 
 void loop() {
@@ -63,10 +73,15 @@ void loop() {
                     circle.setPixelColor(9,255,255,0);
                     circle.setBrightness(64);
                     circle.show();
-                    
+                    StartupSeq();
 
     Wire.requestFrom(8,1);
     while (Wire.available()) { // slave may send less than requested
+      buttonState = digitalRead(Sswitch);
+
+      if (!(buttonState == HIGH)){
+      digitalWrite(blue, HIGH);
+      digitalWrite(red, LOW);
        c = Wire.read(); // receive a byte as character
         Serial.write(c);
         if(c=='A'){ // DEBUG
@@ -186,6 +201,11 @@ void loop() {
             }
  
                 
+    }else{
+      Serial.write("Knapp på");
+      digitalWrite(red, HIGH);
+      digitalWrite(blue, LOW);
+    }
     }
 }
                   
@@ -198,7 +218,13 @@ void runPresets(){
   strip.show();
 }
                     
-  
+  void StartupSeq(){ 
+    for(int i=0; i<12; i++){
+      circle.setPixelColor(i, 0, 0, 255);
+      circle.show();
+      delay(50);
+    }    
+  }
 
       
     

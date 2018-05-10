@@ -8,7 +8,12 @@
 
 #include <Keypad.h>
 #include <Wire.h>
+#include <LiquidCrystal.h>
 
+// initialize the library by associating any needed LCD interface pin
+// with the arduino pin number it is connected to
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 char keymap[4][4]= { 
 {'1', '2', '3', 'A'},
@@ -25,11 +30,10 @@ char engDirectional[2][2]={
 {'r','d'}};
 
 
-byte rowPins[4] = {9, 8, 7, 6}; 
-byte colPins[4] = {5, 4, 3, 2}; 
-byte engRowPins[2]={0,13};
-byte engColPins[3]={12,11,10};
-
+byte rowPins[4] ={45,46,47,48};//{49,50,51,52};//{52, 51, 50, 49}; 
+byte colPins[4] = {49,50,51,52};//{48, 47, 46, 45}; 
+byte engRowPins[2]={30,31};
+byte engColPins[3]={32,34,33};
 byte DirPin[2]={A0,A1};
 byte DirCol[2]={A2,A3};
 
@@ -41,10 +45,15 @@ Keypad EngIn=Keypad(makeKeymap(engKeymap),engRowPins,engColPins,2,3);
 Keypad DirPad=Keypad(makeKeymap(engDirectional),DirPin,DirCol,2,2);
 
 
-void setup() {
+void setup() { 
+  lcd.begin(16, 2);
+  Wire.onRequest(requestEvent);
   Serial.begin(9600);
   Wire.begin(8);
-  Wire.onRequest(requestEvent);
+  
+  // Print a message to the LCD.
+  lcd.print("hello, world!");
+  
 }
 
 //If key is pressed, this key is stored in a 'keypressed' variable

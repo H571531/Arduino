@@ -1,3 +1,11 @@
+/***********************
+ * Sketch by Adrian M. *
+ *                     *
+ * http://morclan.net/ *
+ *                     *
+ ************************/
+
+
 #include <Keypad.h>
 #include <Wire.h>
 
@@ -9,12 +17,12 @@ char keymap[4][4]= {
 {'*', '0', '#', 'D'}};
 
 char engKeymap[2][3]={
-  {'3', '6', '9'},
-  {'5', '4', 'n'}};
+{'3', '6', '9'},
+{'5', '4', 'n'}};
 
- char engDirectional[2][2]={
-  {'u','l'},
-  {'r','d'}};
+char engDirectional[2][2]={
+{'u','l'},
+{'r','d'}};
 
 
 byte rowPins[4] = {9, 8, 7, 6}; 
@@ -60,7 +68,8 @@ void requestEvent(){
 
 
 void loop() {
-/*//DEBUG
+/*
+ //DEBUG
  char ReturnEng=EngIn.getKey();
  // Serial.write("Er hoy");
 if(ReturnEng!=NO_KEY){

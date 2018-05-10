@@ -4,9 +4,11 @@
 
 
 #define PIN 15
+#define PIN2 14
 char incomingByte; 
 char c;
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel circle =Adafruit_NeoPixel(12,PIN2, NEO_GRB+NEO_KHZ800); 
 
 int toggleLights;
 int toggleEngines;
@@ -21,11 +23,21 @@ const int engines=6;
 const int shields=5;
 const int landingGear=4;
 
+//Shields display
+const int RightS=3;
+const int FrontS=0;
+const int BackS=6;
+
+
 
 void setup() {
   // put your setup code here, to run once:
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
+
+  circle.begin();
+  circle.show();
+  
   Wire.begin();
   
   
@@ -44,6 +56,13 @@ void loop() {
         // send data only when you receive data:
                     strip.setPixelColor(0,0, 0, 255);
                     strip.setBrightness(64);
+
+                    circle.setPixelColor(0,0,0,255);
+                    circle.setPixelColor(3,255,0,0);
+                    circle.setPixelColor(6,0,255,0);
+                    circle.setPixelColor(9,255,255,0);
+                    circle.setBrightness(64);
+                    circle.show();
                     
 
     Wire.requestFrom(8,1);
@@ -136,6 +155,34 @@ void loop() {
                         strip.show();
                       }
                       delay(20);
+            }else if(c=='d'){
+              Serial.write("Avionics");
+              Keyboard.begin();
+              Keyboard.press(200);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
+            }else if(c=='u'){
+              Serial.write("PowerDist-Reset");
+              Keyboard.begin();
+              Keyboard.press(201);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
+            }else if(c=='l'){
+              Serial.write("Weapons");
+              Keyboard.begin();
+              Keyboard.press(198);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
+            }else if(c=='r'){
+              Serial.write("Shields");
+              Keyboard.begin();
+              Keyboard.press(199);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
             }
  
                 

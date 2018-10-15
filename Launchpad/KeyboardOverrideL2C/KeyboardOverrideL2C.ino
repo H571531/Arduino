@@ -4,9 +4,11 @@
 
 
 #define PIN 15
+#define PIN2 14
 char incomingByte; 
 char c;
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(8, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel circle =Adafruit_NeoPixel(12,PIN2, NEO_GRB+NEO_KHZ800); 
 
 int toggleLights;
 int toggleEngines;
@@ -21,13 +23,38 @@ const int engines=6;
 const int shields=5;
 const int landingGear=4;
 
+//Shields display
+const int RightS=3;
+const int FrontS=0;
+const int BackS=6;
+
+//Switch
+const int red=6;
+const int blue=7;
+const int Sswitch=5;
+int buttonState = 0; 
+
+//Joystick
+const int X_pin = A1; // analog pin connected to X output
+const int Y_pin = A0; // analog pin connected to Y output
+int x;
+int y;
+
+
 
 void setup() {
   // put your setup code here, to run once:
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
-  Wire.begin();
+
+  circle.begin();
+  circle.show();
   
+  Wire.begin();
+
+  pinMode(Sswitch, INPUT);
+  pinMode(red,OUTPUT);
+  pinMode(blue,OUTPUT);
   
    toggleLights=0;
    toggleEngines=0;
@@ -37,6 +64,8 @@ void setup() {
    toggleLandinggear=0;
    toggleStatus=0;
    runPresets();
+   StartupSeq();
+   
 }
 
 void loop() {
@@ -44,10 +73,22 @@ void loop() {
         // send data only when you receive data:
                     strip.setPixelColor(0,0, 0, 255);
                     strip.setBrightness(64);
+
+                    circle.setPixelColor(0,0,0,255);
+                    circle.setPixelColor(3,255,0,0);
+                    circle.setPixelColor(6,0,255,0);
+                    circle.setPixelColor(9,255,255,0);
+                    circle.setBrightness(64);
+                    circle.show();
                     
 
     Wire.requestFrom(8,1);
     while (Wire.available()) { // slave may send less than requested
+      buttonState = digitalRead(Sswitch);
+
+      if (!(buttonState == HIGH)){ //The joystick will lock all other inputs to be faster. 
+      digitalWrite(blue, HIGH);
+      digitalWrite(red, LOW);
        c = Wire.read(); // receive a byte as character
         Serial.write(c);
         if(c=='A'){ // DEBUG
@@ -65,7 +106,7 @@ void loop() {
                       Keyboard.end();
                       toggleLights++;
                       if(toggleLights%2==1){
-                      strip.setPixelColor(1, 0, 2553333, 0);
+                      strip.setPixelColor(1, 0, 255, 0);
                       }else{
                         strip.setPixelColor(1, 255, 0, 0);
                       }
@@ -77,7 +118,7 @@ void loop() {
                       Keyboard.end();
                       toggleEngines++;
                       if(toggleEngines%2==1){
-                      strip.setPixelColor(engines, 0, 2553333, 0);
+                      strip.setPixelColor(engines, 0, 255, 0);
                       }else{
                         strip.setPixelColor(engines, 255, 0, 0);
                       }
@@ -89,7 +130,7 @@ void loop() {
                       Keyboard.end();
                       togglePower++;
                       if(togglePower%2==1){
-                      strip.setPixelColor(power, 0, 2553333, 0);
+                      strip.setPixelColor(power, 0, 255, 0);
                       }else{
                         strip.setPixelColor(power, 255, 0, 0);
                       }
@@ -101,7 +142,7 @@ void loop() {
                       Keyboard.end();
                       toggleShield++;                      
                       if(toggleShield%2==1){
-                      strip.setPixelColor(shields, 0, 2553333, 0);
+                      strip.setPixelColor(shields, 0, 255, 0);
                       }else{
                         strip.setPixelColor(shields, 255, 0, 0);
                       }
@@ -136,9 +177,76 @@ void loop() {
                         strip.show();
                       }
                       delay(20);
+            }else if(c=='d'){
+              Serial.write("Avionics");
+              Keyboard.begin();
+              Keyboard.press(200);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
+            }else if(c=='u'){
+              Serial.write("PowerDist-Reset");
+              Keyboard.begin();
+              Keyboard.press(201);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
+            }else if(c=='l'){
+              Serial.write("Weapons");
+              Keyboard.begin();
+              Keyboard.press(198);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
+            }else if(c=='r'){
+              Serial.write("Shields");
+              Keyboard.begin();
+              Keyboard.press(199);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
             }
  
                 
+    }else{
+      digitalWrite(red, HIGH);
+      digitalWrite(blue, LOW);
+      Serial.write("X: ");
+      Serial.println(analogRead(X_pin));
+      Serial.write("Y: ");
+      Serial.println(analogRead(Y_pin));
+   x=analogRead(X_pin);
+   y=analogRead(Y_pin);
+      if(x<100){
+        Serial.println("Left");//Debug purpose
+              Keyboard.begin();
+              Keyboard.press(228);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();
+      }else if(x>1000){
+        Serial.println("Right"); //Debug purpose
+              Keyboard.begin();
+              Keyboard.press(230);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();          
+      }else if(y<100){
+        Serial.println("Down"); //Debug purpose
+              Keyboard.begin();
+              Keyboard.press(226);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();          
+      }else if(y>1000){
+        Serial.println("Up"); //Debug purpose
+              Keyboard.begin();
+              Keyboard.press(232);
+              delay(20);
+              Keyboard.releaseAll();
+              Keyboard.end();         
+      }
+    }
     }
 }
                   
@@ -151,7 +259,13 @@ void runPresets(){
   strip.show();
 }
                     
-  
+  void StartupSeq(){ 
+    for(int i=0; i<12; i++){
+      circle.setPixelColor(i, 0, 0, 255);
+      circle.show();
+      delay(200);
+    }    
+  }
 
       
     

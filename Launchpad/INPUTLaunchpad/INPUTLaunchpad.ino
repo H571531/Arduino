@@ -4,11 +4,18 @@
  * http://morclan.net/ *
  *                     *
  ************************/
-
-
 #include <Keypad.h>
 #include <Wire.h>
 #include <LiquidCrystal.h>
+
+
+
+const byte numCols= 4;
+
+
+const byte engNumRows=2;
+const byte engNumCols=3;
+
 
 //-----Setup for keymap----- Default keymap (Numpad)
 

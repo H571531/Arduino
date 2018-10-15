@@ -86,7 +86,7 @@ void loop() {
     while (Wire.available()) { // slave may send less than requested
       buttonState = digitalRead(Sswitch);
 
-      if (!(buttonState == HIGH)){
+      if (!(buttonState == HIGH)){ //The joystick will lock all other inputs to be faster. 
       digitalWrite(blue, HIGH);
       digitalWrite(red, LOW);
        c = Wire.read(); // receive a byte as character
@@ -106,7 +106,7 @@ void loop() {
                       Keyboard.end();
                       toggleLights++;
                       if(toggleLights%2==1){
-                      strip.setPixelColor(1, 0, 2553333, 0);
+                      strip.setPixelColor(1, 0, 255, 0);
                       }else{
                         strip.setPixelColor(1, 255, 0, 0);
                       }
@@ -118,7 +118,7 @@ void loop() {
                       Keyboard.end();
                       toggleEngines++;
                       if(toggleEngines%2==1){
-                      strip.setPixelColor(engines, 0, 2553333, 0);
+                      strip.setPixelColor(engines, 0, 255, 0);
                       }else{
                         strip.setPixelColor(engines, 255, 0, 0);
                       }
@@ -130,7 +130,7 @@ void loop() {
                       Keyboard.end();
                       togglePower++;
                       if(togglePower%2==1){
-                      strip.setPixelColor(power, 0, 2553333, 0);
+                      strip.setPixelColor(power, 0, 255, 0);
                       }else{
                         strip.setPixelColor(power, 255, 0, 0);
                       }
@@ -142,7 +142,7 @@ void loop() {
                       Keyboard.end();
                       toggleShield++;                      
                       if(toggleShield%2==1){
-                      strip.setPixelColor(shields, 0, 2553333, 0);
+                      strip.setPixelColor(shields, 0, 255, 0);
                       }else{
                         strip.setPixelColor(shields, 255, 0, 0);
                       }
@@ -209,7 +209,6 @@ void loop() {
  
                 
     }else{
-     // Serial.write("Knapp på");
       digitalWrite(red, HIGH);
       digitalWrite(blue, LOW);
       Serial.write("X: ");
@@ -219,28 +218,28 @@ void loop() {
    x=analogRead(X_pin);
    y=analogRead(Y_pin);
       if(x<100){
-        Serial.println("Left");
+        Serial.println("Left");//Debug purpose
               Keyboard.begin();
               Keyboard.press(228);
               delay(20);
               Keyboard.releaseAll();
               Keyboard.end();
       }else if(x>1000){
-        Serial.println("Right");
+        Serial.println("Right"); //Debug purpose
               Keyboard.begin();
               Keyboard.press(230);
               delay(20);
               Keyboard.releaseAll();
               Keyboard.end();          
       }else if(y<100){
-        Serial.println("Down");
+        Serial.println("Down"); //Debug purpose
               Keyboard.begin();
               Keyboard.press(226);
               delay(20);
               Keyboard.releaseAll();
               Keyboard.end();          
       }else if(y>1000){
-        Serial.println("Up");
+        Serial.println("Up"); //Debug purpose
               Keyboard.begin();
               Keyboard.press(232);
               delay(20);

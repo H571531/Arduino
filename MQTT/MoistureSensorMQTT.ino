@@ -53,6 +53,7 @@ void loop() {
 	sensorValue = analogRead(sensorPin);
 	client.publish('chilli',sensorValue);
 	timer=0;
+	digitalWrite(powerPin,LOW);
   }
   
   
